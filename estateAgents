@@ -1,0 +1,165 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HouseSalesStaticMethods
+{
+    public class House
+    {
+        //create a blueprint for a house object
+        //non-static or instance fields
+        public string address = "";
+        public int numberOfBedrooms = 0;
+        public int price = 0;
+        public bool sold = false;
+        public int parkingSpaces = 0;
+
+        //static field
+        public static int housesForSale = 0;
+
+        public House(string address, int numberOfBedrooms, int price)
+        {
+            this.address = address;
+            this.numberOfBedrooms = numberOfBedrooms;
+            this.price = price;
+            this.sold = false;
+
+            housesForSale++;                    //House. isn't needed here because the static variable is in the House class
+        }
+        public House(string address, int numberOfBedrooms, int price, int parkingSpaces)
+        {
+            this.address = address;
+            this.numberOfBedrooms = numberOfBedrooms;
+            this.price = price;
+            this.sold = false;
+            this.parkingSpaces = parkingSpaces;
+
+            housesForSale++;                    //House. isn't needed here because the static variable is in the House class
+        }
+
+        public void DisplayHouse()
+        {
+            Console.WriteLine("Address: {0} \n No. bedrooms: {1}\n Price: £{2:N0}.", address, numberOfBedrooms, price);  //:N0 formats the number
+            if (sold)
+            {
+                Console.WriteLine("This house has been sold.");
+            }
+            else
+            {
+                Console.WriteLine("This house is available to buy.");
+            }
+            Console.WriteLine();
+        }
+
+        public void SellHouse(int price)
+        {
+            this.sold = true;
+            this.price = price;
+
+            housesForSale--;
+
+            Console.WriteLine("The house at {0} has been sold for £{1:N0}.", this.address, this.price);
+            Console.WriteLine();
+        }
+
+        public static void DisplayAllHouses(List<House> housesList)
+        {
+            int totalValueSold = 0;
+            int totalValueAvailable = 0;
+
+            Console.WriteLine("The details of the houses on our books are: ");
+            Console.WriteLine();
+            //go through the houses list, displaying details and calculating totals
+            foreach (House item in housesList)
+            {
+
+                Console.WriteLine("Address: {0} \n No. bedrooms {1}\n Price: £{2:N0}\n Parking Spaces {3}.", item.address, item.numberOfBedrooms, item.price, item.parkingSpaces);  //:N0 formats the number
+                if (item.sold)
+                {
+                    Console.WriteLine("This house has been sold.");
+                    totalValueSold += item.price;
+                }
+                else
+                {
+                    Console.WriteLine("This house is available to buy.");
+                    totalValueAvailable += item.price;
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+            //display summary data
+            Console.WriteLine("The total number of houses for sale is: " + House.housesForSale);
+            Console.WriteLine();
+            Console.WriteLine("The total value of houses sold is: £{0:N0}.", totalValueSold);
+            Console.WriteLine("The total value of houses available is: £{0:N0}.", totalValueAvailable);
+            Console.WriteLine();
+        }
+
+    }
+
+    public class diffHouses
+    {
+        public string address = "";
+        public int numberOfBedrooms = 0;
+        public int price = 0;
+        public bool sold = false;
+
+        //static field
+        public static int housesForSale = 0;
+
+        public diffHouses(string address, int numberOfBedrooms, int price)
+        {
+            this.address = address;
+            this.numberOfBedrooms = numberOfBedrooms;
+            this.price = price;
+            this.sold = false;
+
+            housesForSale++;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //initialise the static variable
+            House.housesForSale = 0;
+
+            //initialise a list of houses for use in the non-static 
+            //DisplayAllHouses method
+            List<House> housesList = new List<House>();
+
+            //instantiate house objects and give values to their fields using add method, 
+            //incrementing the static variable each time a house is added and adding each
+            //house to the list
+            House house1 = new House("23 Railway Cuttings, East Cheam", 1, 150000, 2);
+            housesList.Add(house1);
+
+            House house2 = new House("4 Privet Drive, Little Whinging, Surrey", 4, 750000);
+            housesList.Add(house2);
+
+            House house3 = new House("Flat 368, Nelson Mandela House, Dockside Estate, Peckham", 3, 250000);
+            housesList.Add(house3);
+
+            House house4 = new House("243 Valleyway Cuttings, North Cheam", 1, 150600, 3);
+            housesList.Add(house1);
+
+            House house5 = new House("1 Privet Close, Little Spiking, Surrey", 5, 750000);
+            housesList.Add(house2);
+
+            House house6 = new House("Flat 368, Junior Mandela Close, Dockside Estate, Peckham", 3, 000000, 1);
+            housesList.Add(house3);
+
+            //display the details of the houses
+            House.DisplayAllHouses(housesList);
+
+            //sell a house
+            house1.SellHouse(135000);
+
+            //display the details of the houses
+            House.DisplayAllHouses(housesList);
+
+        }
+    }
+}
